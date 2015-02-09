@@ -29,13 +29,21 @@
     <div class="container">
 
     <h1>timesCrypto</h1>
-    <h2>Encrypt and decrypt messages using NYTimes articles as a key</h2>
+    <h2>Encrypt and decrypt messages using NYTimes abstracts as a key</h2>
     <h3>An OpenTimes Hackathon project</h3>
-
+    <hr>
     <form>
+    <div class="form-group">
+      <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Encrypt message
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Decrypt message
+      </label>
+      </div>
       <div class="form-group">
-        <label>Article URL</label>
-        <input class="form-control" id="article" placeholder="url ">
+        <label>Passsphase</label>
+        <input class="form-control" id="article" placeholder="The longer the better">
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Message</label>
@@ -44,6 +52,8 @@
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
     </div>
+
+
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
