@@ -1,7 +1,5 @@
 /*global timesData, console */
 
-console.log(timesData.results);
-
 var phase = document.getElementById("phase"),
 	submit = document.getElementById("submit"),
 	radio = document.getElementsByName("operation"),
@@ -9,8 +7,31 @@ var phase = document.getElementById("phase"),
 
 submit.addEventListener("click", function(e) {
 	e.preventDefault();
+	var abstracts = timesData.results,
+		phaseArray = UT.toNumberArray(phase.value),
+		isDecrypt = radio[0].checked,
+		num = [],
+		order = [],
+		encrypt;
 
-	console.log(radio[0].value)
-	console.log( UT.toNumberArray(phase.value) );
-	console.log( UT.encrypt(message.value, "This is my keyThis is my keyThis is my keyThis is my key" ))
+	if ( isDecrypt ) {
+		for (var i = 0; i < phaseArray.length; i++) {
+			if ( phaseArray[i] > abstracts.length ) {
+				num.push( phaseArray[i] - abstracts.length )
+			} else {
+				num.push( phaseArray[i] )
+			}
+		}
+
+		for (var j = 0; j < num.length; j++) {
+			order.push( abstracts[num[j]].abstract );
+		}
+
+		order = order.join();
+
+		encrypt = UT.encrypt(message.value, order)
+	}
+
+	console.log(encrypt)
+
 })
