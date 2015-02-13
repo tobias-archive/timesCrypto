@@ -1,56 +1,60 @@
-/*global timesData, console */
+/*global UT, ZeroClipboard, timesData, console */
 
-var phase = document.getElementById("phase"),
-	submit = document.getElementById("submit"),
-	radio = document.getElementsByName("operation"),
-	message = document.getElementById("message"),
-	textOutput = document.getElementById("textOutput");
+'use strict';
 
-submit.addEventListener("click", function(e) {
-	e.preventDefault();
+var submit = document.getElementById('submit'),
+	phase = document.getElementById('phase');
+
+var generateKey = function generateKey() {
 	var abstracts = timesData.results,
 		phaseArray = UT.toNumberArray(phase.value),
-		isEncrypt = radio[0].checked,
-		num = [],
 		order = [],
-		output;
+		num = [],
+		keyOrder;
 
+	//Key streams the passphase to the number of abstracts
 	for (var i = 0; i < phaseArray.length; i++) {
 		if ( phaseArray[i] > abstracts.length ) {
-			num.push( phaseArray[i] - abstracts.length )
+			num.push( phaseArray[i] - abstracts.length );
 		} else {
-			num.push( phaseArray[i] )
+			num.push( phaseArray[i] );
 		}
 	}
 
+	//orders the abstracts using the psspshase as a key
 	for (var j = 0; j < num.length; j++) {
 		order.push( abstracts[num[j]].abstract );
 	}
 
-	order = order.join();
+	keyOrder = order.join();
 
-	console.log(message)
+	return keyOrder;
+};
 
-	if ( isEncrypt ) {
-		output = UT.encrypt(message.value, order)
-	} else {
-		output = UT.decrypt(message.value, order)
-	}
+var makeCopyBtn = function makeCopyBtn( output ) {
+	var client = new ZeroClipboard( document.getElementById('copy') );
 
-	textOutput.insertAdjacentHTML("beforeend", output);
-	textOutput.insertAdjacentHTML("beforeend", "<p><button id=\"copy\" >Copy Me</button><p>");
-
-	var client = new ZeroClipboard( document.getElementById("copy") );
-
-	client.on( 'ready', function(event) {
-        // console.log( 'movie is loaded' );
-
-        client.on( 'copy', function(event) {
-          event.clipboardData.setData('text/plain', output);
-        });
-
+    client.on( 'copy', function(event) {
+      event.clipboardData.setData('text/plain', output);
  	});
+};
 
+submit.addEventListener('click', function(e) {
+	e.preventDefault();
+	var radio = document.getElementsByName('operation'),
+		message = document.getElementById('message'),
+		textOutput = document.getElementById('textOutput'),
+		isEncrypt = radio[0].checked,
+		output, key;
 
+	key = generateKey();
 
-})
+	output = isEncrypt  ?  UT.encrypt(message.value, key) : UT.decrypt(message.value, key);
+
+	textOutput.insertAdjacentHTML('beforeend', output + '<p><button id="copy" class="btn btn-success">Copy Me</button><p>');
+	makeCopyBtn( output );
+
+	message.value = '';
+	textOutput.value = '';
+
+});
