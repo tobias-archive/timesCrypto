@@ -51,10 +51,10 @@ submit.addEventListener('click', function(e) {
 
 	output = isEncrypt  ?  UT.encrypt(message.value, key) : UT.decrypt(message.value, key);
 
-	textOutput.insertAdjacentHTML('beforeend', output + '<p><button id="copy" class="btn btn-success">Copy Me</button><p>');
+	textOutput.insertAdjacentHTML('beforeend','<p id="oput">'+output + '</p><p><button id="copy" class="btn btn-success">Copy Me</button><p>');
 	makeCopyBtn( output );
 
 	message.value = '';
-	textOutput.value = '';
+	phase.value = '';
 
 });
