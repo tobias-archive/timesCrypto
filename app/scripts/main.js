@@ -32,11 +32,22 @@ var generateKey = function generateKey() {
 };
 
 var makeCopyBtn = function makeCopyBtn( output ) {
-	var client = new ZeroClipboard( document.getElementById('copy') );
+	var copy = document.getElementById('copy'),
+		client = new ZeroClipboard( copy ),
+		copyBack;
 
     client.on( 'copy', function(event) {
       event.clipboardData.setData('text/plain', output);
  	});
+
+	client.on( 'aftercopy', function() {
+		copy.innerHTML = 'Copied!';
+
+	copyBack = window.setTimeout( function() {
+			copy.innerHTML = 'Copy';
+		}, 3000);
+	});
+
 };
 
 submit.addEventListener('click', function(e) {
@@ -57,7 +68,7 @@ submit.addEventListener('click', function(e) {
 	oput.innerHTML = '';
 
 
-	textOutput.classList.remove("hide");
+	textOutput.classList.remove('hide');
 
 	oput.insertAdjacentHTML('beforeend', output);
 	makeCopyBtn( output );
