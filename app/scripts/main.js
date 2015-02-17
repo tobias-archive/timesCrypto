@@ -2,12 +2,37 @@
 
 'use strict';
 
+
+var options = {
+    url: 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json',
+    qs: keys.nytimes
+};
+
+
+
 var submit = document.getElementById('submit'),
 	phase = document.getElementById('phase');
 
+var toNumberArray = function toNumberArray( array ) {
+	var str = 'abcdefghijklmnopqrstuvwxyz',
+		alphaArray = str.toUpperCase().split('');
+
+	var plainAsNumber = [];
+
+	for (var i = 0; i < array.length; i++) {
+		for (var j=0; j < alphaArray.length; j++) {
+			if (array[i] === alphaArray[j]) {
+				plainAsNumber.push(j);
+			}
+		}
+	}
+
+	return plainAsNumber;
+};
+
 var generateKey = function generateKey() {
 	var abstracts = timesData.results,
-		phaseArray = UT.toNumberArray(phase.value),
+		phaseArray = toNumberArray(phase.value),
 		order = [],
 		num = [],
 		keyOrder;
