@@ -1,14 +1,7 @@
-/*global UT, ZeroClipboard, timesData, console */
+/*global UT, ZeroClipboard, timesData */
+/* jshint -W097 */
 
 'use strict';
-
-
-var options = {
-    url: 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json',
-    qs: keys.nytimes
-};
-
-
 
 var submit = document.getElementById('submit'),
 	phase = document.getElementById('phase');
