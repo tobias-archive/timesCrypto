@@ -23,6 +23,16 @@ var toNumberArray = function toNumberArray( array ) {
 	return plainAsNumber;
 };
 
+// var getData {
+
+//     https://radiant-bayou-8874.herokuapp.com/proxy?url=http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json&source=nytimes
+
+//     $.getJSON( "https://radiant-bayou-8874.herokuapp.com/proxy", options, function(data){
+//       var articles = that.sortData(data);
+//       that.setState({data: articles});
+//     });
+// }
+
 var generateKey = function generateKey() {
 	var abstracts = timesData.results,
 		phaseArray = toNumberArray(phase.value),
