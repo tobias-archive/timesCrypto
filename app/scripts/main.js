@@ -23,18 +23,35 @@ var toNumberArray = function toNumberArray( array ) {
 	return plainAsNumber;
 };
 
-// var getData {
+var getData = function(){
 
-//     https://radiant-bayou-8874.herokuapp.com/proxy?url=http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json&source=nytimes
+	// Establishing a promise in return
+	return new Promise(function(resolve, reject) {
 
-//     $.getJSON( "https://radiant-bayou-8874.herokuapp.com/proxy", options, function(data){
-//       var articles = that.sortData(data);
-//       that.setState({data: articles});
-//     });
-// }
+	// Instantiates the XMLHttpRequest
+		var client = new XMLHttpRequest();
+		var url = "https://radiant-bayou-8874.herokuapp.com/proxy?url=http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json&source=nytimes"
 
-var generateKey = function generateKey() {
-	var abstracts = timesData.results,
+		client.open("GET", url, true);
+		
+		client.onreadystatechange = function(){
+			if(this.readyState == 4){
+				if(this.status == 200){
+					// Performs the function "resolve" the case this.status is equal to 200
+					resolve(JSON.parse(this.response));
+				} else{
+					// Performs the function "reject" the case is different this.status 200
+					reject({"error":this.statusText});
+				}
+			}
+		};
+
+		client.send();
+	});
+}
+
+var generateKey = function generateKey( data ) {
+	var abstracts = data.results,
 		phaseArray = toNumberArray(phase.value),
 		order = [],
 		num = [],
@@ -87,18 +104,23 @@ submit.addEventListener('click', function(e) {
 		isEncrypt = radio[0].checked,
 		output, key;
 
-	key = generateKey();
+	getData().then( function( data ) {
 
-	output = isEncrypt  ?  UT.encrypt(message.value, key) : UT.decrypt(message.value, key);
+		data = JSON.parse(data)
 
-	message.value = '';
-	phase.value = '';
-	oput.innerHTML = '';
+		var key = generateKey( data );
+
+		output = isEncrypt  ?  UT.encrypt(message.value, key) : UT.decrypt(message.value, key);
+
+		message.value = '';
+		phase.value = '';
+		oput.innerHTML = '';
 
 
-	textOutput.classList.remove('hide');
+		textOutput.classList.remove('hide');
 
-	oput.insertAdjacentHTML('beforeend', output);
-	makeCopyBtn( output );
+		oput.insertAdjacentHTML('beforeend', output);
+		makeCopyBtn( output );
+	})
 
 });
