@@ -1,4 +1,4 @@
-/*global UT, ZeroClipboard, timesData */
+/*global UT, ZeroClipboard */
 /* jshint -W097 */
 
 'use strict';
@@ -23,6 +23,18 @@ var toNumberArray = function toNumberArray( array ) {
 	return plainAsNumber;
 };
 
+var createParams = function( opts ) {
+	var uri = '';
+
+	for (var key in opts) {
+		uri += encodeURIComponent(key) + '=' + encodeURIComponent(opts[key]) + '&';
+	}
+
+	uri = '?'+uri;
+
+	return uri;
+};
+
 var getData = function(){
 
 	// Establishing a promise in return
@@ -30,25 +42,30 @@ var getData = function(){
 
 	// Instantiates the XMLHttpRequest
 		var client = new XMLHttpRequest();
-		var url = "https://radiant-bayou-8874.herokuapp.com/proxy?url=http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json&source=nytimes"
+		var url = 'https://radiant-bayou-8874.herokuapp.com/proxy';
+		var opts = {
+				url: 'http://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json',
+				source: 'nytimes'
+			};
+		var uri = createParams(opts);
 
-		client.open("GET", url, true);
+		client.open('GET', url+uri, true);
 		
 		client.onreadystatechange = function(){
-			if(this.readyState == 4){
-				if(this.status == 200){
-					// Performs the function "resolve" the case this.status is equal to 200
+			if(this.readyState === 4){
+				if(this.status === 200){
+					// Performs the function 'resolve' the case this.status is equal to 200
 					resolve(JSON.parse(this.response));
 				} else{
-					// Performs the function "reject" the case is different this.status 200
-					reject({"error":this.statusText});
+					// Performs the function 'reject' the case is different this.status 200
+					reject({'error':this.statusText});
 				}
 			}
 		};
 
 		client.send();
 	});
-}
+};
 
 var generateKey = function generateKey( data ) {
 	var abstracts = data.results,
@@ -106,9 +123,9 @@ submit.addEventListener('click', function(e) {
 
 	getData().then( function( data ) {
 
-		data = JSON.parse(data)
+		data = JSON.parse(data);
 
-		var key = generateKey( data );
+		key = generateKey( data );
 
 		output = isEncrypt  ?  UT.encrypt(message.value, key) : UT.decrypt(message.value, key);
 
@@ -121,6 +138,6 @@ submit.addEventListener('click', function(e) {
 
 		oput.insertAdjacentHTML('beforeend', output);
 		makeCopyBtn( output );
-	})
+	});
 
 });
