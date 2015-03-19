@@ -30,6 +30,7 @@ var createParams = function( opts ) {
 		uri += encodeURIComponent(key) + '=' + encodeURIComponent(opts[key]) + '&';
 	}
 
+	uri = uri.slice(0,-1);
 	uri = '?'+uri;
 
 	return uri;
